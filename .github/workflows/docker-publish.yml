@@ -30,11 +30,11 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/dapai-server:latest
+          tags: ghcr.io/peterhgg/dapai-server:latest
 
       - name: Build and push Client
         uses: docker/build-push-action@v5
         with:
           context: ./client
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/dapai-web:latest
+          tags: ghcr.io/peterhgg/dapai-web:latest
