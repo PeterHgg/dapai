@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  dapai-db:
+    image: postgres:15-alpine
+    container_name: dapai-db
+    environment:
+      POSTGRES_PASSWORD: dapai_secret
+      POSTGRES_DB: dapai
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    restart: always
+
+  dapai-redis:
+    image: redis:7-alpine
+    container_name: dapai-redis
+    volumes:
+      - ./data/redis:/data
+    restart: always
+
+  dapai-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: dapai-server
+    environment:
+      DATABASE_URL: "host=dapai-db user=postgres password=dapai_secret dbname=dapai sslmode=disable"
+      REDIS_ADDR: "dapai-redis:6379"
+      GIN_MODE: release
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dapai-db
+      - dapai-redis
+    restart: always
+
+  dapai-web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: dapai-web
+    ports:
+      - "80:80"
+    depends_on:
+      - dapai-server
+    restart: always
