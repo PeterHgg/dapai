@@ -19,9 +19,7 @@ services:
     restart: always
 
   dapai-server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-peterhgg}/dapai-server:latest
     container_name: dapai-server
     environment:
       DATABASE_URL: "host=dapai-db user=postgres password=dapai_secret dbname=dapai sslmode=disable"
@@ -35,9 +33,7 @@ services:
     restart: always
 
   dapai-web:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-peterhgg}/dapai-web:latest
     container_name: dapai-web
     ports:
       - "80:80"
